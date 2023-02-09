@@ -58,6 +58,7 @@ func Listen() {
 	acmeUseStaging := flagSet.Bool("acme-use-staging", false, "Use ACME (ie Let's Encrypt) staging servers")
 	acceptCATerms := flagSet.Bool("accept-ca-terms", false, "Automatically accept CA terms")
 	acmeCa := flagSet.String("acme-certificate-authority", "", "URI for ACME Certificate Authority")
+	disableWebUI := flagSet.Bool("disable-webui", false, "Disable Web UI")
 	err := flagSet.Parse(os.Args[2:])
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "%s: parsing flags: %s\n", os.Args[0], err)
@@ -292,7 +293,14 @@ func Listen() {
 			if strings.HasPrefix(r.URL.Path, "/api/") {
 				http.StripPrefix("/api", api).ServeHTTP(w, r)
 			} else {
-				webUiHandler.handleWebUiRequest(w, r)
+				if *disableWebUI {
+					errMessage := "Web UI disabled"
+					w.WriteHeader(404)
+					io.WriteString(w, errMessage)
+					return
+				} else {
+					webUiHandler.handleWebUiRequest(w, r)
+				}
 			}
 		} else {
 
