@@ -6,13 +6,14 @@ import (
 	"flag"
 	"fmt"
 	"io"
-	"net"
+//	"net"
 	"os"
 	"sync"
 
 	"github.com/boringproxy/boringproxy"
 )
 
+/*
 const usage = `Usage: %s [command] [flags]
 
 Commands:
@@ -23,6 +24,7 @@ Commands:
 
 Use "%[1]s command -h" for a list of flags for the command.
 `
+*/
 
 var Version string
 
@@ -33,13 +35,14 @@ func fail(msg string) {
 func main() {
 	if len(os.Args) < 2 {
 		fmt.Fprintln(os.Stderr, os.Args[0]+": Need a command")
-		fmt.Printf(usage, os.Args[0])
+//		fmt.Printf(usage, os.Args[0])
 		os.Exit(1)
 	}
 
 	command := os.Args[1]
 
 	switch command {
+/*
 	case "version":
 		fmt.Println(Version)
 	case "help", "-h", "--help", "-help":
@@ -84,6 +87,7 @@ func main() {
 		}
 	case "server":
 		boringproxy.Listen()
+*/
 	case "client":
 		flagSet := flag.NewFlagSet(os.Args[0], flag.ExitOnError)
 		server := flagSet.String("server", "", "boringproxy server")
